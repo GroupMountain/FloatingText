@@ -1,5 +1,6 @@
 #pragma once
-#include <iostream>
+
+namespace FloatingText {
 
 inline std::string en_US = R"(
     command.floatingtext.reload=All floating texts have been reloaded! \n%1$s static floating texts and %2$s dynamic floating texts are currently reloaded。
@@ -60,3 +61,5 @@ inline std::string zh_CN = R"(
     info.author=插件作者
     info.loaded=FloatingText 已成功加载！
 )";
+
+} // namespace FloatingText

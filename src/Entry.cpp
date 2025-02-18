@@ -1,11 +1,11 @@
 #include "Entry.h"
-
-ll::Logger logger(PLUGIN_NAME);
+#include "Global.h"
+#include "Language.h"
 
 namespace FloatingText {
 
-std::unique_ptr<Entry>& Entry::getInstance() {
-    static std::unique_ptr<Entry> instance;
+Entry& Entry::getInstance() {
+    static Entry instance;
     return instance;
 }
 
@@ -22,9 +22,9 @@ bool Entry::enable() {
     mI18n->loadAllLanguages();
     initFloatingTexts();
     RegisterCommand();
-    logger.info(tr("info.loaded"));
-    logger.info("{}: GroupMountain", tr("info.author"));
-    logger.info("{}: https://github.com/GroupMountain/FloatingText", tr("info.repository"));
+    logger->info(tr("info.loaded"));
+    logger->info("{}: GroupMountain", tr("info.author"));
+    logger->info("{}: https://github.com/GroupMountain/FloatingText", tr("info.repository"));
     return true;
 }
 
@@ -35,19 +35,16 @@ bool Entry::disable() {
     return true;
 }
 
-bool Entry::unload() {
-    getInstance().reset();
-    return true;
-}
+bool Entry::unload() { return true; }
 
 Config& Entry::getConfig() { return mConfig.value(); }
 
-LangI18n& Entry::getI18n() { return mI18n.value(); }
+GMLIB::Files::I18n::LangI18n& Entry::getI18n() { return mI18n.value(); }
+
+std::string tr(std::string const& key, std::vector<std::string> const& data) {
+    return FloatingText::Entry::getInstance().getI18n().get(key, data);
+}
 
 } // namespace FloatingText
 
-LL_REGISTER_PLUGIN(FloatingText::Entry, FloatingText::Entry::getInstance());
-
-std::string tr(std::string const& key, std::vector<std::string> const& data) {
-    return FloatingText::Entry::getInstance()->getI18n().get(key, data);
-}
+LL_REGISTER_MOD(FloatingText::Entry, FloatingText::Entry::getInstance());

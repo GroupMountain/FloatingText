@@ -9,10 +9,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
-      - uses: actions/checkout@v4
 
       - uses: xmake-io/github-action-setup-xmake@v1
       
@@ -25,14 +21,8 @@ jobs:
       - run: |
           xmake -w -y
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-windows-x64-${{ github.sha }}
           path: |
-            bin/DLL/
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: PDB
-          path: |
-            bin/PDB/
+            bin/

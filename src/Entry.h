@@ -1,18 +1,22 @@
 #pragma once
-#include "Global.h"
+
+#include "Config.h"
+
+#include <ll/api/mod/NativeMod.h>
+#include <ll/api/mod/RegisterHelper.h>
+
+#include <GMLIB/Files/Language/I18n/LangI18n.h>
 
 namespace FloatingText {
-
-using namespace GMLIB::Files::I18n;
 
 class Entry {
 
 public:
-    static std::unique_ptr<Entry>& getInstance();
+    static Entry& getInstance();
 
-    Entry(ll::plugin::NativePlugin& self) : mSelf(self) {}
+    Entry() : mSelf(*ll::mod::NativeMod::current()) {}
 
-    [[nodiscard]] ll::plugin::NativePlugin& getSelf() const { return mSelf; }
+    [[nodiscard]] ll::mod::NativeMod& getSelf() const { return mSelf; }
 
     /// @return True if the plugin is loaded successfully.
     bool load();
@@ -28,12 +32,12 @@ public:
 
     Config& getConfig();
 
-    LangI18n& getI18n();
+    GMLIB::Files::I18n::LangI18n& getI18n();
 
 private:
-    ll::plugin::NativePlugin& mSelf;
-    std::optional<Config>     mConfig;
-    std::optional<LangI18n>   mI18n;
+    ll::mod::NativeMod&                         mSelf;
+    std::optional<Config>                       mConfig;
+    std::optional<GMLIB::Files::I18n::LangI18n> mI18n;
 };
 
 } // namespace FloatingText

@@ -1,5 +1,8 @@
 #pragma once
-#include <iostream>
+
+#include <ll/api/Config.h>
+
+namespace FloatingText {
 
 struct Config {
     int         version  = 1;
@@ -49,3 +52,4 @@ inline std::string defaultDynamicFile = R"([
         }
     }
 ])";
+} // namespace FloatingText

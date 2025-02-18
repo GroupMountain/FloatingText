@@ -1,10 +1,10 @@
 {
-    "name": "${pluginName}",
-    "entry": "${pluginFile}",
+    "name": "${modName}",
+    "entry": "${modFile}",
     "type": "native",
     "author": "GroupMountain",
     "description": "FLoating Text",
-    "version": "0.12.1",
+    "version": "0.13.0",
     "dependencies": [
         {
             "name": "GMLIB"

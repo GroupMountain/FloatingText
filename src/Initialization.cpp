@@ -1,9 +1,14 @@
 #include "Global.h"
 
+#include <GMLIB/Files/JsonFile.h>
+#include <GMLIB/Server/FloatingTextAPI.h>
+
+namespace FloatingText {
+
 nlohmann::json StaticFloatingTextList;
 nlohmann::json DynamicFloatingTextList;
 
-std::vector<int64> mFloatingTestList;
+std::vector<int> mFloatingTextList;
 
 void initFloatingTexts() {
     StaticFloatingTextList =
@@ -17,7 +22,7 @@ void initFloatingTexts() {
         Vec3 pos{x, y, z};
         auto ft = std::make_shared<GMLIB::Server::StaticFloatingText>(text, pos, dimid, true);
         GMLIB::Server::FloatingTextManager::getInstance().add(ft);
-        mFloatingTestList.push_back(ft->getRuntimeID());
+        mFloatingTextList.push_back(ft->getRuntimeID());
     }
     DynamicFloatingTextList =
         GMLIB::Files::JsonFile::initJson("./plugins/FloatingText/config/DynamicFloatingText.json", defaultDynamicFile);
@@ -32,15 +37,15 @@ void initFloatingTexts() {
         auto ft = std::make_shared<GMLIB::Server::DynamicFloatingText>(text, pos, dimid, update, true);
         // Dynamic
         GMLIB::Server::FloatingTextManager::getInstance().add(ft);
-        mFloatingTestList.push_back(ft->getRuntimeID());
+        mFloatingTextList.push_back(ft->getRuntimeID());
     }
 }
 
 void removeAllFloatingTexts() {
-    for (auto& id : mFloatingTestList) {
+    for (auto& id : mFloatingTextList) {
         GMLIB::Server::FloatingTextManager::getInstance().remove(id);
     }
-    mFloatingTestList.clear();
+    mFloatingTextList.clear();
 }
 
 std::pair<int, int> getFloatingTextCount() { return {StaticFloatingTextList.size(), DynamicFloatingTextList.size()}; }
@@ -54,7 +59,7 @@ void createStaticFloatingText(std::string const& text, Vec3 const& pos, int dimI
     GMLIB::Server::FloatingTextManager::getInstance().add(ft);
     StaticFloatingTextList.push_back(json);
     GMLIB::Files::JsonFile::writeFile("./plugins/FloatingText/config/StaticFloatingText.json", StaticFloatingTextList);
-    mFloatingTestList.push_back(ft->getRuntimeID());
+    mFloatingTextList.push_back(ft->getRuntimeID());
 }
 
 void createDynamicFloatingText(std::string const& text, Vec3 const& pos, int dimId, int update) {
@@ -70,5 +75,7 @@ void createDynamicFloatingText(std::string const& text, Vec3 const& pos, int dim
         "./plugins/FloatingText/config/DynamicFloatingText.json",
         DynamicFloatingTextList
     );
-    mFloatingTestList.push_back(ft->getRuntimeID());
+    mFloatingTextList.push_back(ft->getRuntimeID());
 }
+
+} // namespace FloatingText
